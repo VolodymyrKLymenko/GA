@@ -1,0 +1,10 @@
+<h1>Kursova work</h1>
+<router-outlet></router-outlet>
+<div>
+  <p-gmap #gmap *ngIf="mapInitialized"
+    [options]="options"
+    [overlays]="overlays"
+    [style]="{'width':'100%','height':'520px'}"
+    (onMapClick)="handleMapClick($event)">
+  </p-gmap>
+</div>
