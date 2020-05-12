@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { LocationService } from 'src/core/location.service';
+import { GABestRouteService } from 'src/core/ga-best-route-service/gabestroute.service';
+import { Place, Route } from 'src/core/ga-best-route-service/route.model';
 
 @Component({
   selector: 'app-root',
@@ -11,9 +13,17 @@ export class AppComponent {
   public markerIconUrl: string;
   public options: any;
   public overlays: any[];
+  public route: Route;
+
+  private tempPlaces = [
+    { x: 49.879466, y: 23.897648, id: "001" } as Place,
+    { x: 49.883707, y: 23.899216, id: "002" } as Place,
+    { x: 49.885233, y: 23.992323, id: "003" } as Place,
+  ]
 
   constructor(
-    private locationService: LocationService
+    private locationService: LocationService,
+    private gaBestRouteCalculation: GABestRouteService
   ) { }
 
   public ngOnInit(): void {
@@ -23,13 +33,12 @@ export class AppComponent {
 
     this.initializeLocation();
 
-    this.overlays = [
-      new google.maps.Marker({position: {lat: 49.879466, lng: 23.897648}, title:"Konyaalti", icon: this.markerIconUrl}),
-      new google.maps.Marker({position: {lat: 49.883707, lng: 23.899216}, title:"Ataturk Park", icon: this.markerIconUrl}),
-      new google.maps.Marker({position: {lat: 49.885233, lng: 23.992323}, title:"Oldtown", icon: this.markerIconUrl}),
-
-      new google.maps.Polyline({path: [{lat: 49.86149, lng: 23.89743},{lat: 49.86341, lng: 23.99463}, {lat: 46.86149, lng: 32.63743}], geodesic: true, strokeColor: '#FF0000', strokeOpacity: 0.5, strokeWeight: 2})
-    ];
+    this.overlays = [];
+    this.tempPlaces.forEach(place => {
+      this.overlays.push(
+        new google.maps.Marker({position: {lat: place.x, lng: place.y}, title:"Konyaalti", icon: this.markerIconUrl})
+      )
+    });
   }
 
   private initializeLocation(): void {
@@ -50,7 +59,36 @@ export class AppComponent {
     });
   }
 
+  public CalculateRoute(): void {
+    console.log("thank you");
+    this.route = this.gaBestRouteCalculation.CalculateBestRoute(this.tempPlaces);
+
+    this.overlays = [];
+    this.tempPlaces.forEach(place => {
+      this.overlays.push(
+        new google.maps.Marker({position: {lat: place.x, lng: place.y}, title:"Konyaalti", icon: this.markerIconUrl})
+      )
+    });
+
+    for (let index = 0; index < this.route.route.length - 1; index++) {
+      var place1 = this.route.route[index];
+      var place2 = this.route.route[index + 1];
+
+      this.overlays.push(
+        new google.maps.Polyline({path: [{lat: place1.x, lng: place1.y},{lat: place2.x, lng: place2.y}], geodesic: true, strokeColor: '#FF0000', strokeOpacity: 0.5, strokeWeight: 2})
+      );
+    }
+
+    place1 = this.route.route[0];
+    place2 = this.route.route[this.route.route.length-1];
+
+    this.overlays.push(
+      new google.maps.Polyline({path: [{lat: place1.x, lng: place1.y},{lat: place2.x, lng: place2.y}], geodesic: true, strokeColor: '#FF0000', strokeOpacity: 0.5, strokeWeight: 2})
+    );
+  }
+
   public handleMapClick(event): void {
+    console.log(event);
     this.overlays.push(
       new google.maps.Marker(
       {
@@ -58,6 +96,10 @@ export class AppComponent {
         title:"Konyaalti",
         icon: this.markerIconUrl
       })
+    );
+
+    this.tempPlaces.push(
+      { x: event.latLng.lat(), y: event.latLng.lng(), id: "001" } as Place,
     );
   }
 }
