@@ -12,7 +12,7 @@ export class GABestRouteService {
   constructor(private http: HttpClient) {
   }
 
-  public CalculateBestRoute(places: Place[]): Route {
+  public CalculateBestRouteTest(places: Place[]): Route {
     var r = {
       id: "001",
       distance: 120.0,
@@ -37,5 +37,22 @@ export class GABestRouteService {
     });
 
     return res;
+  };
+
+  public CalculateBestRoute(places: Place[]): Observable<Route> {
+    var request = {
+      cities: []
+    };
+
+    places.forEach(place => {
+      request.cities.push(
+        {
+          x: place.x,
+          y: place.y
+        }
+      )
+    });
+
+    return this.http.post<Route>("https://localhost:5001/calculations/bestroute", request);
   };
 }
