@@ -1,8 +1,9 @@
-﻿using System;
+﻿using GeneticlAlgorithmCalculation.GACalculations.Models;
+using System;
 
 namespace GeneticlAlgorithmCalculation.GACalculations
 {
-    public class GeneticAlgorithm
+    public abstract class GeneticAlgorithmSolverBase
     {
         private readonly int _populationSize;
         private readonly double _mutationRate;
@@ -10,7 +11,7 @@ namespace GeneticlAlgorithmCalculation.GACalculations
         private readonly int _elitismCount;
         private readonly int _maxCountOfUnchangedGenerations;
 
-        public GeneticAlgorithm(
+        public GeneticAlgorithmSolverBase(
             int populationSize,
             double mutationRate,
             double crossoverRate,
@@ -29,24 +30,13 @@ namespace GeneticlAlgorithmCalculation.GACalculations
             return new Population(_populationSize, chromosomeLength);
         }
 
-        public double CalculateFitness(Individual individual, City[] cities)
-        {
-            var route = new Route(individual, cities);
-
-            var fitness = 1.0 / route.GetDistance();
-
-            individual.Fitness = fitness;
-
-            return fitness;
-        }
-
-        public void EvaluatePopulation(Population population, City[] cities)
+        protected void EvaluatePopulation(Population population, Func<Individual, double> calculateFitnes)
         {
             var populationFittest = 0.0;
 
             foreach (var individual in population.Individuals)
             {
-                var fitness = CalculateFitness(individual, cities);
+                var fitness = calculateFitnes(individual);
                 if (populationFittest < fitness)
                 {
                     populationFittest = fitness;
@@ -57,12 +47,12 @@ namespace GeneticlAlgorithmCalculation.GACalculations
             population.UpdateFitness(avgFitness);
         }
 
-        public bool IsTerminationConditionMet(Population population)
+        protected bool IsTerminationConditionMet(Population population)
         {
             return population.NotChangedPreviousGenerations > _maxCountOfUnchangedGenerations;
         }
 
-        public Population CrossoverPopulation(Population population, Random rnd)
+        protected Population CrossoverPopulation(Population population, Random rnd)
         {
             var newPopulation = new Population(population);
 
@@ -144,7 +134,7 @@ namespace GeneticlAlgorithmCalculation.GACalculations
             return individuals[population.Size() - 1];
         }
 
-        public Population MutatePopulation(Population population, Random rnd)
+        protected Population MutatePopulation(Population population, Random rnd)
         {
             var newPopulation = new Population(population);
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace GeneticlAlgorithmCalculation.GACalculations
+namespace GeneticlAlgorithmCalculation.GACalculations.Models
 {
     public class Population
     {

@@ -41,11 +41,11 @@ export class GABestRouteService {
 
   public CalculateBestRoute(places: Place[]): Observable<Route> {
     var request = {
-      cities: []
+      places: []
     };
 
     places.forEach(place => {
-      request.cities.push(
+      request.places.push(
         {
           x: place.x,
           y: place.y

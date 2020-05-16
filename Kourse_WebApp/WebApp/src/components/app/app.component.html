@@ -1,11 +1,44 @@
-<h1>Kursova work</h1>
-<router-outlet></router-outlet>
-<div>
-  <p-gmap #gmap *ngIf="mapInitialized"
-    [options]="options"
-    [overlays]="overlays"
-    [style]="{'width':'100%','height':'520px'}"
-    (onMapClick)="handleMapClick($event)">
-  </p-gmap>
-  <button (click)="CalculateRoute()">Clicl Me</button>
+<div class="app-container">
+  <router-outlet></router-outlet>
+  <div class="container">
+    <h1>Kursova work</h1>
+    <div>
+      <p-gmap #gmap *ngIf="mapInitialized"
+        [options]="options"
+        [overlays]="overlays"
+        [style]="{'width':'100%','height':'520px'}"
+        (onMapClick)="handleMapClick($event)">
+      </p-gmap>
+    </div>
+    <div class="statistic-tab row d-flex justify-content-center">
+      <p-table #dt mdbTable [value]="statisticEntities" styleClass="ui-table-customers table table-striped table-responsive-md btn-table">
+          <ng-template pTemplate="header">
+              <tr>
+                  <th>Count</th>
+                  <th>Distance</th>
+                  <th>Duration of calculation (ms)</th>
+                  <th>Generations count</th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-entity>
+              <tr class="ui-selectable-row">
+                  <td>{{entity.id}}</td>
+                  <td>{{entity.distance}}</td>
+                  <td>{{entity.durationInMilliseconds}}</td>
+                  <td>{{entity.generationsCount}}</td>
+              </tr>
+          </ng-template>
+      </p-table>
+    </div>
+    <div class="create-container">
+      <button class="btn btn-dark"
+              type="button"
+              (click)="CalculateRoute()">
+        Calculate
+      </button>
+    </div>
+  </div>
+  <div *ngIf="hasLoadedResources" class="loader-conatainer">
+    <p-progressSpinner></p-progressSpinner>
+  </div>
 </div>

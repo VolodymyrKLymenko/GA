@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { LocationService } from 'src/core/location.service';
 import { GABestRouteService } from 'src/core/ga-best-route-service/gabestroute.service';
 import { Place, Route } from 'src/core/ga-best-route-service/route.model';
+import { StatisticEntity } from 'src/core/models/statistic.model';
+import { LoaderService, LoaderState } from 'src/core/loader/loader.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -9,16 +12,22 @@ import { Place, Route } from 'src/core/ga-best-route-service/route.model';
   styleUrls: ['./app.component.styl']
 })
 export class AppComponent {
+  public hasLoadedResources = false;
+  private subscription: Subscription;
+
   public mapInitialized = false;
   public markerIconUrl: string;
   public options: any;
   public overlays: any[];
   public route: Route;
+  public statisticEntities: StatisticEntity[] = [];
 
+  private calculationCount = 0;
   private tempPlaces = []
 
   constructor(
     private locationService: LocationService,
+    private loaderService: LoaderService,
     private gaBestRouteCalculation: GABestRouteService
   ) { }
 
@@ -27,6 +36,7 @@ export class AppComponent {
       zoom: 12
     };
 
+    this.setLoaderState();
     this.initializeLocation();
 
     this.overlays = [];
@@ -50,12 +60,27 @@ export class AppComponent {
     });
   }
 
+  private setLoaderState(): void {
+    this.subscription = this.loaderService.loaderState
+      .subscribe((state: LoaderState) => {
+        this.hasLoadedResources = state.show;
+      });
+  }
+
   public CalculateRoute(): void {
     this.gaBestRouteCalculation.CalculateBestRoute(this.tempPlaces)
       .subscribe(route => {
-        console.log("thank you");
-
         this.route = route;
+
+        this.calculationCount = this.calculationCount + 1;
+        this.statisticEntities.push(
+          {
+            id: this.calculationCount,
+            distance: this.route.distance,
+            durationInMilliseconds: this.route.durationInMilliseconds,
+            generationsCount: this.route.generationsCount
+          } as StatisticEntity
+        )
 
         this.overlays = [];
         this.tempPlaces.forEach(place => {
