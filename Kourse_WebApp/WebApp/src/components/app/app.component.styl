@@ -6,7 +6,7 @@
     padding 50px 0
     height 100%
 
-    .create-container
+    .calculate-container
         position fixed
         width 70px
         height 70px
@@ -16,6 +16,27 @@
 
 .statistic-tab
     width: 100%
+
+.calculate-container
+    button
+        margin: .5em
+
+::ng-deep
+    body
+        .ui-toolbar
+            background transparent
+            border none
+            min-width 100px
+    .ng-trigger-tabContent
+        position absolute
+        right 0px
+        min-width 400px
+        max-height 400px
+        overflow auto
+    body
+        .ui-accordion .ui-accordion-content
+            background-color transparent
+            border none
 
 :host ::ng-deep .ui-table-customers 
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);

@@ -6,7 +6,9 @@ import { CommonModule } from '@angular/common';
 
 import { TableModule } from 'primeng/table';
 import { GMapModule } from 'primeng/gmap';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { AccordionModule } from 'primeng/accordion';
+
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -19,6 +21,7 @@ import { LoaderInterceptorService } from 'src/core/interceptors/loader.intercept
     AppComponent
   ],
   imports: [
+    AccordionModule,
     NgbModule,
     AppRoutingModule,
     BrowserModule,
@@ -27,7 +30,7 @@ import { LoaderInterceptorService } from 'src/core/interceptors/loader.intercept
     BrowserAnimationsModule,
     GMapModule,
     TableModule,
-    ProgressSpinnerModule
+    MatProgressSpinnerModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptorService, multi: true }
