@@ -757,7 +757,6 @@ __pycache__/
 *.o
 [Dd]ebug*/
 [Rr]elease*/
-*.mode*
 *.app/
 .svn/
 
