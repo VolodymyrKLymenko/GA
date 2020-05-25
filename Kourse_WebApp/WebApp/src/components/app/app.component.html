@@ -1,48 +1,18 @@
 <div class="app-container">
-  <div class="container">
-    <h1>Genetic algorithm Traveling salesman problem solver</h1>
-    <div>
-      <p-gmap #gmap *ngIf="mapInitialized"
-        [options]="options"
-        [overlays]="overlays"
-        [style]="{'width':'100%','height':'520px'}"
-        (onMapClick)="handleMapClick($event)"
-        (onOverlayClick)="handleOverlayClick($event)">
-      </p-gmap>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+    <a class="navbar-brand" href="/#">BEst route</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/calculation">Calculation</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/statistic">Statistic</a>
+        </li>
+      </ul>
     </div>
-    <div class="statistic-tab row d-flex justify-content-center">
-      <p-table #dt mdbTable [value]="statisticEntities" styleClass="ui-table-customers table table-striped table-responsive-md btn-table">
-          <ng-template pTemplate="header">
-              <tr>
-                  <th>Count</th>
-                  <th>Distance</th>
-                  <th>Duration of calculation (ms)</th>
-                  <th>Generations count</th>
-              </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-entity>
-              <tr class="ui-selectable-row">
-                  <td>{{entity.id}}</td>
-                  <td>{{entity.distance | number:'.1-2'}} km</td>
-                  <td>{{entity.durationInMilliseconds}}</td>
-                  <td>{{entity.generationsCount}}</td>
-              </tr>
-          </ng-template>
-      </p-table>
-    </div>
-    <div class="calculate-container">
-      <button class="btn btn-success"
-              type="button"
-              (click)="calculateRoute()">
-        Calculate
-      </button>
-      <button class="btn btn-dark"
-              type="button"
-              (click)="resetPlaces()">
-        Reset
-      </button>
-    </div>
-  </div>
+  </nav>
+  <router-outlet></router-outlet>
   <div *ngIf="hasLoadedResources" class="loader-conatainer">
     <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
   </div>

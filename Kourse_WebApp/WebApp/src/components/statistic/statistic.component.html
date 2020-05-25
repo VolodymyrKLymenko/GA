@@ -1,0 +1,6 @@
+<div class="container">
+  <p-chart type="line" [data]="data"></p-chart>
+
+  <input type="text" pInputText [(ngModel)]="inputData"/>
+  <button type="button" pButton (click)="update($event)">Build</button>
+</div>

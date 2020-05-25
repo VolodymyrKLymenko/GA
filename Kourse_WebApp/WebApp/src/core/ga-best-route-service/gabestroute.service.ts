@@ -3,7 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Route, Place } from './route.model';
-import { ApiRoutes } from 'src/utilities/api-routes';
+import { ApiGARoutes } from 'src/utilities/api-routes';
+import { CalculationStatistic } from '../models/statistic.model';
 
 @Injectable({
   providedIn: 'root'
@@ -53,6 +54,10 @@ export class GABestRouteService {
       )
     });
 
-    return this.http.post<Route>("https://localhost:5001/calculations/bestroute", request);
+    return this.http.post<Route>(`${ApiGARoutes.calculate}`, request);
+  };
+
+  public CalculateStatistic(amounts: any[]): Observable<CalculationStatistic[]> {
+    return this.http.post<CalculationStatistic[]>(`${ApiGARoutes.statistic}`, { "amounts": amounts});
   };
 }

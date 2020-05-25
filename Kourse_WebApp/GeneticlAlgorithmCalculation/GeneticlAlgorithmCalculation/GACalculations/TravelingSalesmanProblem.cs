@@ -28,8 +28,9 @@ namespace GeneticlAlgorithmCalculation.GACalculations
         public Route CalculateBestRoute(Place[] places)
         {
             var rnd = new Random();
-            var startPoint = DateTime.Now;
             var population = InitPopulation(places.Length);
+
+            var startPoint = DateTime.Now;
 
             // Evaluate population
             EvaluatePopulation(population, (individual) => CalculateFitness(individual, places));
@@ -44,7 +45,7 @@ namespace GeneticlAlgorithmCalculation.GACalculations
                 population = CrossoverPopulation(population, rnd);
 
                 // Apply mutation
-                population = MutatePopulation(population, rnd);
+                population = AdaptiveMutatePopulation(population, rnd);
 
                 // Evaluate population
                 EvaluatePopulation(population, (individual) => CalculateFitness(individual, places));
@@ -58,7 +59,7 @@ namespace GeneticlAlgorithmCalculation.GACalculations
             var result = new Route(population.GetFittest(0), places)
             {
                 GenerationsCount = generation,
-                DurationInMilliseconds = endPoint.Subtract(startPoint).TotalMilliseconds
+                DurationInMilliseconds = endPoint.Subtract(startPoint).TotalSeconds
             };
             result.GetDistance();
 

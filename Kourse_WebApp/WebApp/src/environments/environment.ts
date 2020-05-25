@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  openDataServerUrl: 'https://data.rada.gov.ua'
+  gaServerUrl: 'https://localhost:5001'
 };
 
 /*

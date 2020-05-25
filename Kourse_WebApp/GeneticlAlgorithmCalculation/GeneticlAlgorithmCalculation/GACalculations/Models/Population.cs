@@ -59,6 +59,22 @@ namespace GeneticlAlgorithmCalculation.GACalculations.Models
             return Individuals[offset];
         }
 
+        public double GetAvarageFitness()
+        {
+            if (Fitness == -1)
+            {
+                var totalFitness = 0.0;
+                foreach (var individual in Individuals)
+                {
+                    totalFitness += individual.Fitness;
+                }
+
+                Fitness = totalFitness;
+            }
+
+            return Fitness / Individuals.Length;
+        }
+
         public int Size()
         {
             return Individuals.Length;

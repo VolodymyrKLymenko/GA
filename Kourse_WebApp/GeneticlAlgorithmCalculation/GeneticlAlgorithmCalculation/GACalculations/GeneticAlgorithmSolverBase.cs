@@ -163,5 +163,46 @@ namespace GeneticlAlgorithmCalculation.GACalculations
 
             return newPopulation;
         }
+
+        protected Population AdaptiveMutatePopulation(Population population, Random rnd)
+        {
+            var newPopulation = new Population(population);
+
+            var bestFitness = population.GetFittest(0).Fitness;
+
+            for (int populationIndex = 0; populationIndex < population.Size(); populationIndex++)
+            {
+                var individual = population.GetFittest(populationIndex);
+
+                var adaptiveMutationRate = _mutationRate;
+                if (individual.Fitness > population.GetAvarageFitness())
+                {
+                    var fitnessDelta1 = bestFitness - individual.Fitness;
+                    var fitnessDelta2 = bestFitness - population.GetAvarageFitness();
+
+                    adaptiveMutationRate = (fitnessDelta1 / fitnessDelta2) * _mutationRate;
+                }
+
+                for (int genIndex = 0; genIndex < individual.ChromosomeLength; genIndex++)
+                {
+                    if (populationIndex >= _elitismCount)
+                    {
+                        if (adaptiveMutationRate > rnd.NextDouble())
+                        {
+                            var newGenePos = (int)(rnd.NextDouble() * individual.ChromosomeLength);
+                            var gen1 = individual.GetGene(newGenePos);
+                            var gen2 = individual.GetGene(genIndex);
+
+                            individual.SetGene(newGenePos, gen2);
+                            individual.SetGene(genIndex, gen1);
+                        }
+                    }
+                }
+
+                newPopulation.SetIndividual(populationIndex, individual);
+            }
+
+            return newPopulation;
+        }
     }
 }
