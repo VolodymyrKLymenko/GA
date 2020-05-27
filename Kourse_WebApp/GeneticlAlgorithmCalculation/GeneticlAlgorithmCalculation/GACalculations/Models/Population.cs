@@ -5,6 +5,8 @@ namespace GeneticlAlgorithmCalculation.GACalculations.Models
 {
     public class Population
     {
+        private readonly double _percision = 0.000001;
+
         public Individual[] Individuals { get; private set; }
         public double Fitness { get; private set; } = -1;
         public int NotChangedPreviousGenerations { get; private set; } = 0;
@@ -33,6 +35,7 @@ namespace GeneticlAlgorithmCalculation.GACalculations.Models
 
         public void UpdateFitness(double newFitness)
         {
+            //if (Math.Abs(newFitness - Fitness) <= _percision)
             if (newFitness == Fitness)
             {
                 NotChangedPreviousGenerations++;

@@ -10,7 +10,7 @@ import { UIChart } from 'primeng/chart/chart';
 })
 export class StatisticComponent implements OnInit {
   public data: any;
-  public inputData: string = "100, 200, 300";
+  public inputData: string = "10, 20, 30, 40";
 
   private datasets: any[] = [];
   private countOfCharts = 0;

@@ -45,7 +45,7 @@ namespace GeneticlAlgorithmCalculation.GACalculations
                 population = CrossoverPopulation(population, rnd);
 
                 // Apply mutation
-                population = AdaptiveMutatePopulation(population, rnd);
+                population = MutatePopulation(population, rnd);
 
                 // Evaluate population
                 EvaluatePopulation(population, (individual) => CalculateFitness(individual, places));
